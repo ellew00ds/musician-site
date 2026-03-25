@@ -6,11 +6,11 @@ Minimalist website for musician portfolio
 
 ### Installing
 
-git clone https://github.com/ellew00ds/musician-site.git
-cd musician-site
+* git clone https://github.com/ellew00ds/musician-site.git
+* cd musician-site
 
 ### Open the site locally
-open index.html
+* open index.html
 
 ## Authors
 
