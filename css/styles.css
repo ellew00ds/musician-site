@@ -1,0 +1,1042 @@
+/* =============================================================================
+   STERLING STEFFEN — styles.css
+   ============================================================================= */
+
+
+/* --- DESIGN TOKENS ---------------------------------------------------------- */
+:root {
+  --color-bg:           #0c0b09;  /* near-black, slight warm amber tint */
+  --color-text:         #e0dbd2;
+  --color-muted:        #424242;
+  --color-given-name:   #404040;
+  --color-border:       #2a2a2a;
+  --color-border-hover: #5a5a5a;
+  --color-surface:      rgba(255, 255, 255, 0.04);
+  --color-accent-r:     rgba(255, 140, 30,  1);   /* glitch amber */
+  --color-accent-c:     rgba(0,   210, 255, 1);   /* glitch cyan  */
+
+  --gradient-name: linear-gradient(165deg, #f7f4ee 0%, #c4b99a 45%, #f0ece3 100%);
+
+  --font-sans:  'Syne', system-ui, sans-serif;
+  --font-serif: 'Instrument Serif', Georgia, serif;
+  --font-mono:  'Courier New', Courier, monospace;
+  --font-pixel: 'VT323', 'Courier New', monospace;
+
+  --duration-fast:   180ms;
+  --duration-reveal: 680ms;
+  --ease-out:        cubic-bezier(0.22, 1, 0.36, 1);
+
+  /*
+    ── LAYOUT ALIGNMENT ────────────────────────────────────────────────────────
+    Controls the horizontal layout of all content.
+    To switch to centered layout, change all three values:
+      --layout-align:  center
+      --layout-text:   center
+      --layout-gutter: 2rem
+  */
+  --layout-align:  flex-start;
+  --layout-text:   left;
+  --layout-gutter: clamp(3rem, 7vw, 6rem);
+}
+
+
+/* --- RESET ------------------------------------------------------------------ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+::selection {
+  background: rgba(255, 140, 30, 0.35);
+  color: #0c0b09;
+}
+
+:focus-visible {
+  outline: 2px solid rgba(255, 140, 30, 0.55);
+  outline-offset: 4px;
+}
+
+
+/* --- BACKGROUND PHOTO -------------------------------------------------------
+   Press photo at 7% opacity — purely atmospheric, not a portrait.
+   z-index: -1 so the spotlight layer can sit above it at z-index: 0.
+   ---------------------------------------------------------------------------- */
+.bg-photo {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  opacity: 0.07;
+  filter: grayscale(1) blur(0.5px);
+  pointer-events: none;
+}
+
+
+/* --- CURSOR SPOTLIGHT -------------------------------------------------------
+   Soft radial glow that follows the cursor — a stage light on a dark floor.
+   Sits above the background photo (z-index 0) but below all content (z-index 1).
+   Fades in on first mouse move via body.has-spotlight.
+   ---------------------------------------------------------------------------- */
+.spotlight {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    380px circle at var(--spot-x, 50%) var(--spot-y, 50%),
+    rgba(255, 210, 140, 0.055) 0%,
+    transparent 65%
+  );
+  opacity: 0;
+  transition: opacity 1.8s ease;
+}
+
+body.has-spotlight .spotlight { opacity: 1; }
+
+
+/* --- SCAN LINES -------------------------------------------------------------
+   Faint horizontal lines — CRT/monitor texture, no radial vignette so the
+   name area doesn't get framed like a card.
+   ---------------------------------------------------------------------------- */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 99;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent 0px,
+    transparent 3px,
+    rgba(0, 0, 0, 0.022) 3px,
+    rgba(0, 0, 0, 0.022) 4px
+  );
+}
+
+
+/* --- GRAIN OVERLAY ----------------------------------------------------------
+   SVG turbulence noise. steps() makes it jump like real film grain.
+   ---------------------------------------------------------------------------- */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  pointer-events: none;
+  opacity: 0.06;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 200px 200px;
+  animation: grain-shift 7s steps(7) infinite;
+  transition: opacity 0.4s ease;
+}
+
+/* Grain intensifies slightly when any egg is active (audio-reactive) */
+body.audio-active::before { opacity: 0.095; }
+
+@keyframes grain-shift {
+  0%   { background-position:   0px   0px; }
+  14%  { background-position: -80px -40px; }
+  28%  { background-position:  40px  80px; }
+  42%  { background-position: -60px  60px; }
+  57%  { background-position:  80px -60px; }
+  71%  { background-position: -40px  20px; }
+  85%  { background-position:  60px -80px; }
+  100% { background-position:   0px   0px; }
+}
+
+
+/* --- PAGE LAYOUT ------------------------------------------------------------ */
+/* body-glitch: slow periodic filter flicker. 29s cycle keeps it rare. */
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: var(--layout-align);
+  padding: clamp(1rem, 3vh, 1.75rem) 2rem 2rem var(--layout-gutter);
+  /*
+    Three background layers (back to front):
+      1. Near-black base
+      2. Warm amber glow pooling at the bottom — cinematic stage light
+      3. Sine wave texture at 3% — oscilloscope trace, evokes audio signal
+  */
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='500' height='120'%3E%3Cpath d='M0 60 Q62.5 10 125 60 Q187.5 110 250 60 Q312.5 10 375 60 Q437.5 110 500 60' fill='none' stroke='rgba(255%2C255%2C255%2C0.032)' stroke-width='1.2'/%3E%3C/svg%3E") 0 0 / 500px 120px,
+    radial-gradient(ellipse 110% 50% at 50% 100%, rgba(42, 28, 10, 0.85) 0%, transparent 65%),
+    var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  animation: body-glitch 17s ease-in-out infinite, sine-scroll 9s linear infinite;
+}
+
+@keyframes body-glitch {
+  0%, 88%, 100% { filter: none; }
+  88.4% { filter: brightness(1.06) hue-rotate(3deg) saturate(1.2); }
+  88.7% { filter: none; }
+  89.1% { filter: brightness(0.94) contrast(1.07) hue-rotate(-2deg); }
+  89.4% { filter: none; }
+}
+
+/* Scrolls the SVG sine-wave background layer horizontally — live oscilloscope trace */
+@keyframes sine-scroll {
+  from { background-position: 0 0, 0 0, 0 0; }
+  to   { background-position: -500px 0, 0 0, 0 0; }
+}
+
+/* Content anchored to the lower half of the viewport — editorial, grounded. */
+main {
+  flex: 1;
+  width: 100%;
+  max-width: 36rem;
+  text-align: var(--layout-text);
+  display: flex;
+  flex-direction: column;
+  align-items: var(--layout-align);
+  justify-content: flex-end;
+  padding-bottom: clamp(3rem, 8vh, 5rem);
+  position: relative;
+  z-index: 1;
+}
+
+/* Shrink-wraps the h1 so the egg overlay fits exactly */
+.artist-anchor {
+  position: relative;
+  display: inline-block;
+  width: fit-content;
+  max-width: 100%;
+  /* translate is a separate property from transform — parallax JS sets it
+     without interfering with the nameReveal/fadeUp CSS animations on children */
+  transition: translate 0.14s ease-out;
+}
+
+
+/* --- ARTIST NAME ------------------------------------------------------------ */
+.artist-name {
+  display: flex;
+  flex-direction: column;
+  align-items: var(--layout-align); /* keeps "STERLING" aligned with "Steffen" */
+  gap: 0.15em;
+}
+
+/*
+ * "Sterling" — the hero first name. Warm gradient, italic serif.
+ * order: 2 renders it below the "STEFFEN" label in the flex column.
+ * Text content driven by JS scramble; glitch filter applied via JS.
+ */
+.artist-name__given {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(3.8rem, 20vw, 6.5rem);
+  line-height: 0.92;
+  letter-spacing: -0.02em;
+  padding-bottom: 0.12em; /* descender room — 'g' clips without this */
+  background: var(--gradient-name);
+  background-size: 200% 100%;
+  background-position: 0% center;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 0 48px rgba(240, 220, 180, 0.07));
+  transition: background-position 0.55s ease;
+  animation: nameReveal 1.3s var(--ease-out) 0.18s both;
+  order: 1;
+}
+
+.artist-anchor:hover .artist-name__given {
+  background-position: 100% center;
+}
+
+/* "STEFFEN" — surname label above the hero. Variable weight rises on name hover. */
+.artist-name__family {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-variation-settings: 'wght' 400;
+  font-size: clamp(0.65rem, 2vw, 0.8rem);
+  letter-spacing: 0.6em;
+  text-transform: uppercase;
+  color: var(--color-given-name);
+  transition: font-variation-settings 0.35s ease, font-weight 0.35s ease, translate 0.18s ease-out;
+  animation:
+    fadeUp        var(--duration-reveal) var(--ease-out) 0.10s both,
+    given-glitch  13s ease-in-out 2.5s infinite;
+  order: 2;
+}
+
+.artist-anchor:hover .artist-name__family {
+  font-weight: 800;
+  font-variation-settings: 'wght' 800;
+}
+
+@keyframes given-glitch {
+  0%, 92%, 100% {
+    letter-spacing: 0.6em;
+    color: var(--color-given-name);
+    transform: none;
+  }
+  92.4% {
+    letter-spacing: 0.58em;
+    color: rgba(255, 140, 30, 0.28);
+    transform: translateX(1px);
+  }
+  92.8% {
+    letter-spacing: 0.62em;
+    color: var(--color-given-name);
+    transform: none;
+  }
+  93.3% {
+    color: rgba(0, 210, 255, 0.2);
+  }
+  93.7% {
+    color: var(--color-given-name);
+  }
+}
+
+
+
+
+/* --- TAG LINE --------------------------------------------------------------- */
+/* 17s cycle, barely-there flicker at 91-93% mark */
+/* translate set by parallax JS — separate from the tag-glitch animation's transform */
+.tag {
+  margin-top: 0.75rem;
+  font-family: var(--font-pixel);
+  font-weight: 400;
+  font-size: 0.85rem;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  text-indent: 0.35em;
+  color: var(--color-muted);
+  transition: translate 0.10s ease-out;
+  animation:
+    fadeUp     var(--duration-reveal) var(--ease-out) 0.34s both,
+    tag-glitch 17s ease-in-out 4s infinite;
+}
+
+@keyframes tag-glitch {
+  0%, 91%, 100% {
+    transform: none;
+    opacity: 1;
+    letter-spacing: 0.35em;
+  }
+  91.4% {
+    transform: translateX(1.5px) scaleX(1.008);
+    opacity: 0.65;
+    letter-spacing: 0.37em;
+  }
+  91.8% {
+    transform: translateX(-0.5px);
+    opacity: 1;
+    letter-spacing: 0.33em;
+  }
+  92.2% {
+    transform: none;
+    letter-spacing: 0.35em;
+  }
+}
+
+
+
+/* --- CURSOR BLINK -----------------------------------------------------------
+   Classic BBS terminal cursor after the tag line. step-end = authentic digital blink.
+   Hidden for now — keep the element + animation in place for easy re-enable.
+   ---------------------------------------------------------------------------- */
+.cursor-blink {
+  display: none;
+  font-family: var(--font-pixel);
+  color: rgba(255, 255, 255, 0.22);
+  margin-left: 0.1em;
+  animation: cursor-blink 1s step-end infinite;
+}
+
+@keyframes cursor-blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+
+/* --- BOOKING CTA ------------------------------------------------------------ */
+.booking-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: clamp(1.75rem, 4vh, 2.5rem);
+  padding: 0 1.5em;
+  height: 3.25rem;
+  border: 1px solid var(--color-border);
+  border-radius: 2px;
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: clamp(0.75rem, 2.4vw, 0.9rem);
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  text-decoration: none;
+  text-indent: 0.42em;
+  color: rgba(255, 255, 255, 0.55);
+  transition: color var(--duration-fast) ease, border-color var(--duration-fast) ease;
+  animation:
+    fadeUp          var(--duration-reveal) var(--ease-out) 0.52s both,
+    bpm-pulse       0.5s ease-in-out infinite,
+    booking-glitch  29s ease-in-out 5s infinite;
+}
+
+@keyframes bpm-pulse {
+  0%, 100% { transform: scale(1);     }
+  50%       { transform: scale(1.007); }
+}
+
+@keyframes booking-glitch {
+  0%, 94%, 100%  { border-color: var(--color-border); }
+  94.4%          { border-color: rgba(255, 140, 30, 0.7); }
+  94.8%          { border-color: var(--color-border); }
+  95.3%          { border-color: rgba(0, 210, 255, 0.6); }
+  95.7%          { border-color: var(--color-border); }
+}
+
+/* Reveal "→" from inside the button on hover — text is the affordance */
+.booking-cta__arrow {
+  display: inline-block;
+  overflow: hidden;
+  max-width: 0;
+  margin-left: 0;
+  letter-spacing: 0;
+  opacity: 0;
+  white-space: nowrap;
+  transition: max-width 0.38s var(--ease-out), opacity 0.3s ease, margin-left 0.38s var(--ease-out);
+}
+
+.booking-cta:hover {
+  color: var(--color-text);
+  border-color: rgba(255, 255, 255, 0.32);
+}
+
+.booking-cta:hover .booking-cta__arrow {
+  max-width: 1.4rem;
+  margin-left: 0.45em;
+  opacity: 0.65;
+}
+
+
+/* --- CREDITS DISCLOSURE ----------------------------------------------------- */
+/* "[ w/ ]" toggle — click to reveal the band list. Terminal-bracket style.   */
+.credits-wrap {
+  margin-top: 1.75rem;
+  animation: fadeUp var(--duration-reveal) var(--ease-out) 0.66s both;
+}
+
+.credits-summary {
+  list-style: none;
+  font-family: var(--font-pixel);
+  font-size: 0.78rem;
+  letter-spacing: 0.25em;
+  color: rgba(255, 255, 255, 0.22);
+  cursor: pointer;
+  user-select: none;
+  transition: color 0.25s ease;
+  padding: 0.15em 0;
+}
+
+.credits-summary::-webkit-details-marker { display: none; }
+.credits-summary:hover { color: rgba(255, 255, 255, 0.4); }
+.credits-wrap[open] .credits-summary { color: rgba(255, 255, 255, 0.28); }
+
+.credits {
+  margin-top: 0.55rem;
+  font-family: var(--font-sans);
+  font-weight: 300;
+  font-size: clamp(0.5rem, 1.4vw, 0.62rem);
+  letter-spacing: 0.3em;
+  text-indent: 0.3em;
+  color: rgba(255, 255, 255, 0.2);
+  line-height: 2;
+  animation: fadeUp 0.22s ease-out both;
+}
+
+
+/* --- VISUALLY HIDDEN (SEO bio) ---------------------------------------------- */
+.seo-bio {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+
+/* --- EGG SPOTS --------------------------------------------------------------
+   Hidden interactive spots. cursor: pointer makes them discoverable on hover.
+
+   Spots:
+     #egg-name   — invisible overlay on the artist name
+     #egg-dot    — the "·" in "Austin · TX"
+     #egg-corner — barely-visible ○ in bottom-right corner
+     #egg-top    — fully invisible spot in top-left (where a logo would be)
+   ---------------------------------------------------------------------------- */
+.egg {
+  background: transparent;
+  border: none;
+  cursor: pointer;            /* pointer = users CAN discover these */
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  font-family: inherit;
+  transition: color 0.4s ease, box-shadow 0.4s ease;
+}
+
+/* --- KONAMI HINT MODE -------------------------------------------------------
+   After 30s idle, all egg spots briefly pulse — one whisper that secrets exist.
+   .egg--dot and .egg--corner have text, so color works.
+   .egg--name and .egg--top are invisible, so we reveal them with faint glows.
+   ---------------------------------------------------------------------------- */
+.egg--dot.egg--hint    { color: rgba(255, 255, 255, 0.32); }
+.egg--corner.egg--hint { color: rgba(255, 255, 255, 0.30); }
+.egg--fstar.egg--hint  { color: rgba(255, 255, 255, 0.32); }
+.egg--name.egg--hint   { box-shadow: 0 0 40px rgba(255, 255, 255, 0.06); }
+.egg--rule.egg--hint   { background: rgba(255, 255, 255, 0.22); }
+.egg--top.egg--hint    {
+  outline: 1px solid rgba(255, 255, 255, 0.16);
+  outline-offset: -1px;
+  border-radius: 3px;
+}
+
+/* Invisible full-area overlay over the h1 */
+.egg--name {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  border-radius: 4px;
+}
+
+.egg--name.is-active {
+  box-shadow: 0 0 100px rgba(240, 220, 180, 0.09);
+}
+
+/* The "·" separator in the tag line */
+.egg--dot {
+  display: inline;
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  color: inherit;
+  line-height: inherit;
+  vertical-align: baseline;
+  padding: 0 0.2em;
+  transition: color var(--duration-fast) ease;
+}
+
+.egg--dot:hover { color: rgba(255, 255, 255, 0.5); }
+
+.egg--dot.is-active {
+  color: rgba(255, 255, 255, 0.7);
+  animation: dot-pulse 1.2s ease-in-out infinite;
+}
+
+@keyframes dot-pulse {
+  0%, 100% { opacity: 0.7; }
+  50%       { opacity: 1;   }
+}
+
+/* Small ○ glyph, bottom-right. Almost invisible (4% opacity). */
+.egg--corner {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.75rem;
+  z-index: 10;
+  color: rgba(255, 255, 255, 0.04);
+  font-size: 0.85rem;
+  line-height: 1;
+  padding: 0.4rem;
+  transition: color var(--duration-fast) ease;
+}
+
+.egg--corner:hover { color: rgba(255, 255, 255, 0.2); }
+
+.egg--corner.is-active {
+  color: rgba(255, 255, 255, 0.55);
+  animation: corner-pulse 1s ease-in-out infinite;
+}
+
+@keyframes corner-pulse {
+  0%, 100% { opacity: 0.55; transform: scale(1); }
+  50%       { opacity: 1;    transform: scale(1.25); }
+}
+
+/* The thin name-rule, made clickable — plays "Chord". Breathes like a resting signal. */
+.egg--rule {
+  display: block;
+  width: 3.5rem;
+  height: 3px;            /* taller than 1px so it's tappable */
+  margin: 1.1rem 0 0;
+  padding: 1px 0;         /* extra hit area without changing visual size */
+  background: rgba(255, 255, 255, 0.07);
+  border-radius: 1px;
+  transform-origin: center;
+  transition: background var(--duration-fast) ease, box-shadow var(--duration-fast) ease, color 0.4s ease;
+  animation: rule-breathe 4.5s ease-in-out infinite;
+}
+
+@keyframes rule-breathe {
+  0%, 100% { transform: scaleX(1);    opacity: 0.85; }
+  50%       { transform: scaleX(1.5); opacity: 1; }
+}
+
+.egg--rule:hover { background: rgba(255, 255, 255, 0.18); }
+
+.egg--rule.is-active {
+  background: rgba(255, 255, 255, 0.35);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.12);
+}
+
+.egg--rule.egg--hint { background: rgba(255, 255, 255, 0.22); }
+
+/* Tiny ✦ glyph in the footer — barely visible, plays "Bell". */
+.egg--fstar {
+  color: rgba(255, 255, 255, 0.06);
+  font-size: 0.65rem;
+  line-height: 1;
+  padding: 0.5rem 0.4rem;
+  transition: color var(--duration-fast) ease, color 0.4s ease, box-shadow 0.4s ease;
+}
+
+.egg--fstar:hover    { color: rgba(255, 255, 255, 0.35); }
+.egg--fstar.is-active { color: rgba(255, 255, 255, 0.7); }
+.egg--fstar.egg--hint { color: rgba(255, 255, 255, 0.32); }
+
+
+/* Completely invisible spot — top-left, no visual hint at all */
+.egg--top {
+  position: fixed;
+  top: 0.75rem;
+  left: 1.25rem;
+  z-index: 10;
+  width: 2.5rem;
+  height: 2.5rem;
+  /* no color, no border — truly hidden */
+}
+
+.egg--top.is-active::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.12);
+  animation: top-pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes top-pulse {
+  0%, 100% { opacity: 0.5; }
+  50%       { opacity: 1; }
+}
+
+
+/* --- RIPPLE / SPLASH EFFECT -------------------------------------------------
+   Rings are spawned by JS using element.animate() — this CSS is just the base.
+   ---------------------------------------------------------------------------- */
+.ripple {
+  position: fixed;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 999;
+}
+
+
+/* --- ASCII FLASH ------------------------------------------------------------
+   Brief ASCII art that appears every ~20s at random positions.
+   JS controls content, position, and triggers the animation.
+   ---------------------------------------------------------------------------- */
+.ascii-flash {
+  position: fixed;
+  z-index: 150;
+  pointer-events: none;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  line-height: 1.55;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.20);
+  white-space: pre;
+  user-select: none;
+  opacity: 0;
+  transform: translate(-50%, -50%);
+}
+
+@keyframes ascii-in-out {
+  0%   { opacity: 0;    filter: blur(3px); }
+  10%  { opacity: 1;    filter: blur(0); }
+  78%  { opacity: 1;    filter: blur(0); }
+  100% { opacity: 0;    filter: blur(1.5px); }
+}
+
+
+/* --- CURSOR TRAIL -----------------------------------------------------------
+   Short dashes that rotate to match travel direction — oscilloscope trace.
+   --dot-angle set by JS (Math.atan2(dy, dx)); sine-wave Y-offset applied there.
+   ---------------------------------------------------------------------------- */
+.cursor-dot {
+  position: fixed;
+  width: 6px;
+  height: 2px;
+  border-radius: 1px;
+  background: rgba(255, 255, 255, 0.22);
+  pointer-events: none;
+  z-index: 998;
+  transform: translate(-50%, -50%) rotate(var(--dot-angle, 0rad));
+  transition: opacity 0.45s ease, transform 0.45s ease;
+}
+
+.cursor-dot--fade {
+  opacity: 0;
+  transform: translate(-50%, -50%) rotate(var(--dot-angle, 0rad)) scale(0.3);
+}
+
+
+
+/* --- WEDDINGS LINK ---------------------------------------------------------- */
+.weddings-link {
+  font-family: var(--font-pixel);
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.22);
+  text-decoration: none;
+  letter-spacing: 0.06em;
+  transition: color var(--duration-fast) ease;
+}
+
+.weddings-link:hover { color: rgba(255, 255, 255, 0.55); }
+
+
+/* --- FOOTER ----------------------------------------------------------------- */
+footer {
+  margin-top: auto;
+  padding-top: 3.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+  justify-content: var(--layout-align);
+  align-items: center;
+  animation: fadeUp var(--duration-reveal) var(--ease-out) 0.62s both;
+  position: relative;
+  z-index: 1;
+}
+
+.social {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  color: #606060;
+  text-decoration: none;
+  border-radius: 50%;
+  transition: color var(--duration-fast) ease, background var(--duration-fast) ease, transform var(--duration-fast) ease;
+}
+
+.social:hover {
+  color: var(--color-text);
+  background: rgba(255, 255, 255, 0.06);
+  transform: translateY(-2px);
+}
+
+.social:active { transform: scale(0.94) translateY(0); }
+
+.social svg {
+  display: block;
+  width: 1.35rem;
+  height: 1.35rem;
+  overflow: visible;
+  /* Same 17s duration as body-glitch, same keyframe window — fires simultaneously */
+  animation: social-glitch 17s ease-in-out infinite;
+}
+
+@keyframes social-glitch {
+  /* Mirrors body-glitch at 88–89.4% so icons react the moment the page flickers */
+  0%, 88%, 100% { filter: none; }
+  88.4%         { filter: hue-rotate(70deg) brightness(1.15); }
+  88.7%         { filter: none; }
+  89.1%         { filter: hue-rotate(-40deg) brightness(0.9); }
+  89.4%         { filter: none; }
+}
+
+
+/* --- WAVEFORM BARS ----------------------------------------------------------
+   Three animated bars appear in the footer when any audio egg is playing.
+   Opacity driven by body.audio-active (toggled by existing setAudioActive()).
+   transform-origin: bottom — bars grow upward like a real VU meter.
+   ---------------------------------------------------------------------------- */
+.waveform-bars {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 14px;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  margin-left: 0.25rem;
+}
+
+body.audio-active .waveform-bars { opacity: 1; }
+
+.waveform-bars span {
+  display: block;
+  width: 2px;
+  height: 10px;
+  background: rgba(255, 255, 255, 0.22);
+  border-radius: 1px;
+  transform-origin: bottom;
+  animation: bar-bounce 0.75s ease-in-out infinite;
+}
+
+.waveform-bars span:nth-child(1) { animation-duration: 0.70s; animation-delay: 0.00s; }
+.waveform-bars span:nth-child(2) { animation-duration: 0.90s; animation-delay: 0.20s; }
+.waveform-bars span:nth-child(3) { animation-duration: 0.65s; animation-delay: 0.38s; }
+
+@keyframes bar-bounce {
+  0%, 100% { transform: scaleY(0.2); }
+  50%       { transform: scaleY(1);   }
+}
+
+
+/* --- TRAY TRIGGER BUTTONS ---------------------------------------------------
+   [ bands ] — hidden below the Book CTA. Low opacity, VT323 terminal style.
+   ∿ (waveform glyph) — fixed bottom-left, mirrors ○ corner egg on the right.
+   ---------------------------------------------------------------------------- */
+.tray-btn {
+  display: block;
+  margin-top: 1.25rem;
+  font-family: var(--font-pixel);
+  font-weight: 400;
+  font-size: 0.8rem;
+  letter-spacing: 0.2em;
+  color: rgba(255, 255, 255, 0.08);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0.25em 0;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  transition: color 0.3s ease;
+}
+
+.tray-btn:hover { color: rgba(255, 255, 255, 0.32); }
+.tray-btn.is-active { color: rgba(0, 210, 255, 0.5); }
+
+.tray-btn--songs {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 1.75rem;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  margin: 0;
+  font-size: 1.1rem;
+  letter-spacing: 0;
+  color: rgba(255, 255, 255, 0.05);
+}
+
+.tray-btn--songs:hover  { color: rgba(255, 255, 255, 0.25); }
+.tray-btn--songs.is-active { color: rgba(0, 210, 255, 0.55); }
+
+
+/* --- INFO TRAY --------------------------------------------------------------
+   Slides up from the bottom. Holds band list or song selector.
+   ---------------------------------------------------------------------------- */
+.info-tray {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 500;
+  background: rgba(10, 9, 7, 0.97);
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  padding: 1.5rem clamp(1.5rem, 5vw, 4rem) 2.5rem;
+  transform: translateY(100%);
+  transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.info-tray.is-open { transform: translateY(0); }
+
+.info-tray__close {
+  position: absolute;
+  top: 1.1rem;
+  right: clamp(1.5rem, 5vw, 4rem);
+  font-family: var(--font-pixel);
+  font-size: 0.78rem;
+  letter-spacing: 0.15em;
+  color: rgba(255, 255, 255, 0.18);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0.2em;
+  transition: color 0.2s ease;
+}
+
+.info-tray__close:hover { color: rgba(255, 255, 255, 0.5); }
+
+.info-tray__label {
+  font-family: var(--font-pixel);
+  font-size: 0.78rem;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  margin-bottom: 1rem;
+}
+
+.info-tray__list {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.2rem 2.5rem;
+}
+
+.info-tray__list li {
+  font-family: var(--font-pixel);
+  font-size: 1.15rem;
+  color: rgba(224, 219, 210, 0.6);
+  line-height: 2;
+}
+
+.info-tray__list--sounds {
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.info-tray__list--sounds li {
+  display: flex;
+  align-items: baseline;
+  gap: 0.8rem;
+}
+
+.info-tray__list--sounds button {
+  font-family: var(--font-pixel);
+  font-size: 1.15rem;
+  color: rgba(224, 219, 210, 0.7);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  letter-spacing: 0.1em;
+  min-width: 4.5rem;
+  transition: color 0.2s ease;
+}
+
+.info-tray__list--sounds button:hover     { color: var(--color-text); }
+.info-tray__list--sounds button.is-playing { color: rgba(0, 210, 255, 0.9); }
+
+.info-tray__list--sounds button.is-playing::before {
+  content: '▶ ';
+  font-size: 0.7em;
+}
+
+.info-tray__list--sounds span {
+  font-family: var(--font-pixel);
+  font-size: 0.82rem;
+  color: rgba(66, 66, 66, 0.9);
+  letter-spacing: 0.06em;
+}
+
+@media (max-width: 520px) {
+  .tray-btn--songs {
+    bottom: max(1.5rem, env(safe-area-inset-bottom, 0px) + 1rem);
+    left: 1.25rem;
+  }
+  .info-tray {
+    padding-bottom: max(2.5rem, env(safe-area-inset-bottom, 0px) + 1.5rem);
+  }
+}
+
+
+/* --- LOAD ANIMATIONS -------------------------------------------------------- */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Name "draws in" left-to-right like a signature, while the scramble decodes.
+   The clip opens over 1.3s in sync with the JS scramble (starts at 350ms).
+   Phase 2: replace with a traced SVG stroke-dashoffset animation. */
+@keyframes nameReveal {
+  from { clip-path: inset(0 100% 0 0); opacity: 0.3; transform: translateY(6px); }
+  to   { clip-path: inset(0 0% 0 0);   opacity: 1;   transform: translateY(0); }
+}
+
+
+/* --- MOBILE ----------------------------------------------------------------- */
+@media (max-width: 520px) {
+  /* Tighter left gutter on small phones — more room for the name */
+  :root { --layout-gutter: 1.25rem; }
+
+  /* The footer needs less vertical breathing room at phone size */
+  footer { padding-top: 2.25rem; }
+
+  /* Egg dot: larger tap target on touch screens */
+  .egg--dot {
+    padding: 0.55em 0.3em;
+    margin: 0 -0.1em;
+  }
+
+  /* Corner egg: respect safe-area on notched phones */
+  .egg--corner {
+    bottom: max(1.5rem, env(safe-area-inset-bottom, 0px) + 1rem);
+    right:  1.25rem;
+  }
+}
+
+/* Short viewports (landscape phone, small browser window) —
+   collapse vertical spacing so nothing gets squeezed off screen */
+@media (max-height: 620px) {
+  main {
+    justify-content: center;     /* stop pinning to bottom when there's no room */
+    padding-bottom: 1rem;
+  }
+
+  footer { padding-top: 1.5rem; }
+
+  .booking-cta { margin-top: 1rem; }
+}
+
+/* Narrow desktop / small tablet — prevent gutter from eating too much width */
+@media (max-width: 700px) and (min-width: 521px) {
+  :root { --layout-gutter: clamp(1.5rem, 5vw, 2.5rem); }
+}
+
+
+/* --- ACCESSIBILITY: REDUCED MOTION ------------------------------------------ */
+@media (prefers-reduced-motion: reduce) {
+  body,
+  body::before { animation: none; }
+
+  .artist-name__given,
+  .artist-name__family,
+  .tag,
+  .booking-cta,
+  .egg--rule,
+  footer { animation: none; }
+
+  /* Disable variable-font transition on the surname label */
+  .artist-name__family { transition: none; }
+
+  /* Cursor stays visible but stops blinking */
+  .cursor-blink { animation: none; }
+
+  .egg--dot.is-active,
+  .egg--corner.is-active { animation: none; }
+
+  .social svg { animation: none; }
+
+  .cursor-dot { display: none; }
+
+  /* Disable depth parallax and spotlight */
+  .artist-anchor,
+  .artist-name__family,
+  .tag { transition: none; }
+
+  /* Freeze waveform bars — show as static bars if audio is active */
+  .waveform-bars span { animation: none; transform: scaleY(0.6); }
+}

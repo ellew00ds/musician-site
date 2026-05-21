@@ -1,0 +1,208 @@
+STERLING STEFFEN — ASCII FLASH POOL
+=====================================
+28 entries. One appears every 18–24 s at a random viewport position.
+Opacity ~20% — blink and you'll miss it.
+
+
+ 1. KATAKANA CASCADE
+────────────────────
+ｼﾅﾓﾆｻﾜﾂｵﾘｱﾑﾐｷｳｸｺｿｶ
+ｻﾜﾂｵﾘｱﾑｰｳｼﾐﾋｷｻﾜｵﾘｱ
+
+
+ 2. KATAKANA + DIGITS
+──────────────────────
+ｷ2ｼ8ｵ4ﾊ7ﾐ1ｷ5ｼ9ｵ3ﾊ6
+8ﾐ2ｷ7ｼ4ｵ1ﾊ5ﾐ9ｷ3ｼ6ｵ
+
+
+ 3. DISCO BALL
+──────────────
+  * · * · * · *
+  ·  ( · o · )  ·
+  * · * · * · *
+      disco
+
+
+ 4. CHAMPAGNE
+─────────────
+    °  ·  °  · °
+  |  cheers  !!  |
+  |  ~~~~~~~~   |
+   \___________/
+
+
+ 5. FFT FREQUENCY ANALYSIS
+───────────────────────────
+fft  t=2.341s
+A2  ████████████  -12
+E3  ████░░░░░░░░  -24
+A3  ██████░░░░░░  -19
+C4  ███░░░░░░░░░  -28
+
+
+ 6. ADSR ENVELOPE
+─────────────────
+attack  decay  sustain
+      /\
+     /  \______
+    /          \___
+    A    D    S   R
+
+
+ 7. VU METER
+────────────
+L  ▓▓▓▓▓▓▓▓▓░░  -4dBFS
+R  ▓▓▓▓▓▓▓░░░░  -8dBFS
+─────────────────────
+peak  -0.3dBFS  OK
+
+
+ 8. MIDI NOTE DUMP
+──────────────────
+note_on  A3  v82  t+0.000
+note_on  E4  v61  t+0.480
+note_on  G4  v74  t+0.720
+note_on  A4  v58  t+1.200
+
+
+ 9. MUSIC NOTES
+───────────────
+  ♩   ♪   ♫   ♬
+    ♬   ♩   ♪
+  ♪   ♫   ♬   ♩
+
+
+10. FIRST DANCE
+───────────────
+ ♩  first dance  ♩
+    A min · 88 BPM
+     here we go
+
+
+11. WAVEFORM AMPLITUDE BARS
+────────────────────────────
+▁▂▃▄▅▆▇█▇▆▅▄▃▂▁▂▃▄▅▆
+▁▃▅▇█▇▅▃▁▃▅▇█▇▅▃▁▃▅▇
+▂▄▆█▆▄▂▄▆█▆▄▂▄▆█▆▄▂▄
+
+
+12. CAMELOT KEY WHEEL
+──────────────────────
+key  8A  ←→  9A  ←→  7A
+A min  F maj  D min
+mix  harmonic  ✓
+
+
+13. ALTO SAX — A4  (●●○ / ●●○)
+────────────────────────────────
+patch.sax_01
+inst  alto.sax
+note  A4  440Hz
+keys  ●●○  ─  ●●○
+
+
+14. ALTO SAX — G4  (●●● / ●●○)
+────────────────────────────────
+patch.sax_02
+inst  alto.sax
+note  G4  392Hz
+keys  ●●●  ─  ●●○
+
+
+15. ALTO SAX — F4  (●●● / ●●●)  all fingers
+─────────────────────────────────────────────
+patch.sax_03
+inst  alto.sax
+note  F4  349Hz
+keys  ●●●  ─  ●●●
+
+
+16. ALTO SAX — D5  upper register, octave key
+───────────────────────────────────────────────
+patch.sax_04
+inst  alto.sax  oct ●
+note  D5  587Hz
+keys  ●○○  ─  ○○○
+
+
+17. ALTO SAX — Bb4  bis key fingering
+───────────────────────────────────────
+patch.sax_05
+inst  alto.sax
+note  Bb4  466Hz
+keys  ●bis●  ─  ○○○
+
+
+18. DJ SET MARKER
+──────────────────
+@ 00:32:14  120.0 BPM
+key  A minor  (8A)
+trk  sterling_live_v3
+bar  016  beat  001
+
+
+19. DANCE FLOOR ENERGY
+───────────────────────
+[ floor   full   ✓ ]
+  ●●●●●●●●●●●
+  energy ████████
+
+
+20. PITCH DETECTION TUNER
+───────────────────────────
+A4  440.0 Hz  in tune
++0.1 ct  ████████●░
+ref  440  ♩ = 120
+
+
+21. CROSSFADER / EQ STRIP
+───────────────────────────
+ch A  ────────●────  +2
+hi  ●  mid  ●  lo  ○
+cue  on  fader  78%
+
+
+22. WAVEFORM OVERVIEW
+──────────────────────
+overview  t=00:00 → 06:30
+▁▁▂▃▅▇█▇▅▄▃▄▅▇█▆▄▃▂▁
+energy  ▲ peak  02:14
+
+
+23. SPARKLE BURST
+──────────────────
+  ✦  *  ✦  *  ✦
+  *     ✦     *
+  ✦  *  ✦  *  ✦
+
+
+24. GO TIME COUNTDOWN
+──────────────────────
+  3  ·  2  ·  1
+ ♩  ♪  ♫  ♬  ♩
+   go  time  !!
+
+
+25. NON-SEQUITUR — wrong reverb
+────────────────────────────────
+wrong reverb.
+still ok.
+
+
+26. NON-SEQUITUR — sax was right
+──────────────────────────────────
+the sax was right
+all along.
+
+
+27. NON-SEQUITUR — set list
+────────────────────────────
+lost the set list.
+improvised.
+
+
+28. NON-SEQUITUR — drummer
+────────────────────────────
+the drummer was right
+about the reverb.

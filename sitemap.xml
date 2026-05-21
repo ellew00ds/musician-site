@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  sitemap.xml — lists every public page on the site so Google can find and
+  index them quickly. For a single-page site this is just one URL.
+
+  After deploying, submit this to Google Search Console:
+  https://search.google.com/search-console
+  → Sitemaps → paste "https://sterlingsteffen.com/sitemap.xml" → Submit
+
+  Update the <lastmod> date any time you make significant content changes.
+-->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://sterlingsteffen.com/</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>1.0</priority>
+  </url>
+</urlset>

@@ -1,0 +1,17 @@
+people call me "DJ Sterling". edit appropriately.
+- wedding page off of this bio - gotes to a /weddings page
+	- go to traditional booking site
+	- more standard site, less avant garde (think of avg booker/user), past venues, testimonials
+	- grey / solid color bar on the side, little "about you" that scrolls down parallax style or brief fade in
+	- not overcrowded, succinct
+	- good pics, short bio, then book
+	- placeholder text for now
+
+social
+	- planners
+	- testimonials (bobby, claire, nay (bass player - lcd, ryan)
+	- the knot - dart reviews
+	- the goal of site: find and book me for weddings
+	- linking out to bandcamp
+	- mixcloud?
+	- link to projects/installations

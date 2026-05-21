@@ -1,305 +1,271 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- ── CHARACTER SET & VIEWPORT ─────────────────────────────────────────── -->
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sterling Steffen · Musician · Austin, TX</title>
-  <meta name="description" content="Sterling Steffen — musician based in Austin, Texas. Official site, links, and booking." />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+
+  <!-- ── PRIMARY META ──────────────────────────────────────────────────────── -->
+  <title>DJ Sterling · Sterling Steffen · Austin, TX</title>
+
+  <!--
+    Meta description: shown in Google search results. Keep under 160 characters.
+    EDIT THIS to tweak how you appear in search results.
+  -->
+  <meta name="description" content="DJ Sterling (Sterling Steffen) — Austin-based wedding DJ, multi-instrumentalist, and producer. Available for weddings and private events in Austin, TX and San Antonio." />
+
   <meta name="robots" content="index, follow" />
+
+  <!--
+    Canonical: tells Google which URL is authoritative if the site is ever
+    accessible at multiple addresses. EDIT to your real domain once live.
+  -->
   <link rel="canonical" href="https://sterlingsteffen.com/" />
-  <meta property="og:type" content="website" />
-  <meta property="og:title" content="Sterling Steffen" />
-  <meta property="og:description" content="Musician based in Austin, Texas. Official site and booking." />
-  <meta property="og:url" content="https://sterlingsteffen.com/" />
-  <meta property="og:locale" content="en_US" />
-  <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Sterling Steffen" />
-  <meta name="twitter:description" content="Musician based in Austin, Texas. Official site and booking." />
+
+  <!-- Local SEO signals — associates this page with Austin, TX for Google -->
+  <meta name="geo.region"    content="US-TX" />
+  <meta name="geo.placename" content="Austin, TX" />
+
+  <!-- ── OPEN GRAPH (social sharing previews) ─────────────────────────────── -->
+  <!--
+    Controls how links look when shared on Instagram, iMessage, Slack, etc.
+    TODO (og:image): save the press photo from dart-collective.com/djs/sterling-s/
+    and place it at assets/og-image.jpg (1200×630px recommended).
+    Then the preview will show the photo on every social share.
+  -->
+  <meta property="og:type"        content="website" />
+  <meta property="og:title"       content="Sterling Steffen · DJ & Musician" />
+  <meta property="og:description" content="Austin-based DJ, multi-instrumentalist, and producer. Available for weddings and private events." />
+  <meta property="og:url"         content="https://sterlingsteffen.com/" />
+  <meta property="og:locale"      content="en_US" />
+  <meta property="og:image"        content="https://sterlingsteffen.com/assets/og-image.jpg" />
+  <meta property="og:image:width"  content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt"    content="Sterling Steffen — Austin DJ and musician" />
+
+  <!-- ── TWITTER / X CARD ─────────────────────────────────────────────────── -->
+  <meta name="twitter:card"        content="summary_large_image" />
+  <meta name="twitter:title"       content="Sterling Steffen · DJ & Musician" />
+  <meta name="twitter:description" content="Austin-based DJ, multi-instrumentalist, and producer. Available for weddings and private events." />
+  <meta name="twitter:image"       content="https://sterlingsteffen.com/assets/og-image.jpg" />
+
+  <!-- ── THEME COLOR ───────────────────────────────────────────────────────── -->
   <meta name="theme-color" content="#0a0a0a" />
+
+  <!-- ── APPLE TOUCH ICON ─────────────────────────────────────────────────── -->
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png" />
+
+  <!-- ── FAVICON ──────────────────────────────────────────────────────────── -->
+  <!-- SVG: modern browsers (Chrome, Firefox, Safari 14+) -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230a0a0a'/%3E%3Ctext x='16' y='23' font-family='Georgia%2C serif' font-style='italic' font-size='22' text-anchor='middle' fill='%23e0dbd2'%3ES%3C/text%3E%3C/svg%3E" />
+  <!-- ICO: older browsers and Windows taskbar pinning -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+
+  <!-- ── SITEMAP ───────────────────────────────────────────────────────────── -->
+  <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
+
+  <!-- ── FONTS ─────────────────────────────────────────────────────────────── -->
+  <!-- preconnect warms up the DNS/TLS handshake before the font request -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Syne:wght@500;700;800&display=swap" rel="stylesheet" />
+  <!-- Syne loaded as variable font (wght 400..800) to enable smooth weight transitions -->
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Syne:wght@400..800&family=VT323&display=swap" rel="stylesheet" />
 
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 2rem;
-      background: #0a0a0a;
-      color: #e6e6e6;
-      font-family: 'Syne', system-ui, sans-serif;
-      font-size: 0.9375rem;
-      line-height: 1.5;
-    }
-
-    main {
-      text-align: center;
-      max-width: 36rem;
-    }
-
-    /* Shrink-wraps to the title so it stays centered like a lone block; button is out of flow */
-    .artist-anchor {
-      position: relative;
-      display: inline-block;
-      width: fit-content;
-      max-width: 100%;
-    }
-
-    .artist-name {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.15em;
-    }
-
-    .artist-name__given {
-      font-family: 'Syne', sans-serif;
-      font-weight: 800;
-      font-size: clamp(0.7rem, 2.2vw, 0.85rem);
-      letter-spacing: 0.55em;
-      text-transform: uppercase;
-      text-indent: 0.55em;
-      color: #5c5c5c;
-    }
-
-    .artist-name__family {
-      font-family: 'Instrument Serif', Georgia, serif;
-      font-style: italic;
-      font-weight: 400;
-      font-size: clamp(3.25rem, 14vw, 6.5rem);
-      line-height: 0.92;
-      letter-spacing: -0.02em;
-      background: linear-gradient(165deg, #f5f5f5 0%, #a8a8a8 45%, #eaeaea 100%);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      filter: drop-shadow(0 0 40px rgba(255, 255, 255, 0.06));
-    }
-
-    .tag {
-      margin-top: 1.35rem;
-      font-family: 'Syne', sans-serif;
-      font-weight: 500;
-      font-size: 0.7rem;
-      letter-spacing: 0.35em;
-      text-transform: uppercase;
-      text-indent: 0.35em;
-      color: #4a4a4a;
-    }
-
-    .booking-cta {
-      display: inline-block;
-      margin-top: 2rem;
-      padding: 0.65em 1.6em;
-      font-family: 'Syne', sans-serif;
-      font-weight: 700;
-      font-size: 0.68rem;
-      letter-spacing: 0.28em;
-      text-transform: uppercase;
-      text-decoration: none;
-      text-indent: 0.28em;
-      color: #b0b0b0;
-      border: 1px solid #3d3d3d;
-      border-radius: 999px;
-      transition: color 180ms ease, border-color 180ms ease, background 180ms ease;
-    }
-
-    .booking-cta:hover {
-      color: #f0f0f0;
-      border-color: #6a6a6a;
-      background: rgba(255, 255, 255, 0.04);
-    }
-
-    footer {
-      margin-top: 4rem;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem 1.75rem;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .social {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 2.75rem;
-      height: 2.75rem;
-      color: #6a6a6a;
-      text-decoration: none;
-      border-radius: 50%;
-      transition: color 180ms ease, background 180ms ease, transform 180ms ease;
-    }
-
-    .social:hover {
-      color: #c8c8c8;
-      background: rgba(255, 255, 255, 0.05);
-    }
-
-    .social:active {
-      transform: scale(0.96);
-    }
-
-    .social svg {
-      display: block;
-      width: 1.35rem;
-      height: 1.35rem;
-      overflow: visible;
-    }
-
-    /* Out of document flow so the name centers as before; desktop: to the right of the name */
-    .secret-hit {
-      position: absolute;
-      left: calc(100% + 50px);
-      top: 50%;
-      transform: translateY(-50%);
-      width: 2.5rem;
-      height: 2.5rem;
-      border: none;
-      border-radius: 4px;
-      background: transparent;
-      cursor: default;
-      opacity: 0;
-      transition: opacity 160ms ease, background 160ms ease;
-    }
-
-    @media (max-width: 560px) {
-      .artist-anchor {
-        padding-bottom: 2.75rem;
-      }
-
-      .secret-hit {
-        left: 50%;
-        top: calc(100% + 14px);
-        transform: translateX(-50%);
-      }
-    }
-
-    .secret-hit:hover {
-      opacity: 1;
-      cursor: pointer;
-      background: rgba(255, 255, 255, 0.06);
-    }
-
-    .secret-hit:focus-visible {
-      opacity: 1;
-      outline: 1px solid rgba(255, 255, 255, 0.35);
-      outline-offset: 2px;
-    }
-
-    .secret-hit.is-playing:hover {
-      background: rgba(255, 255, 255, 0.1);
-    }
-  </style>
+  <!-- ── STYLES ────────────────────────────────────────────────────────────── -->
+  <link rel="stylesheet" href="css/styles.css" />
 </head>
 <body>
+
+  <!-- Spotlight: soft radial glow that trails the cursor. JS sets --spot-x/y on mousemove. -->
+  <div class="spotlight" aria-hidden="true"></div>
+
+  <!--
+    Press photo background — uncomment when you want the photo layer back.
+    assets/og-image.jpg exists and is ready. Currently using gradient only.
+  -->
+  <!-- <img class="bg-photo" src="assets/og-image.jpg" alt="" aria-hidden="true" loading="eager" onerror="this.style.opacity='0'" /> -->
+
+  <!-- ── MAIN — artist identity ─────────────────────────────────────────────── -->
   <main>
+
+    <!-- EGG SPOT 1: invisible overlay on the artist name → "Drift" (ambient arpeggio, A min) -->
     <div class="artist-anchor">
+      <button class="egg egg--name" id="egg-name" aria-label="Play Drift"></button>
       <h1 class="artist-name">
         <span class="artist-name__given">Sterling</span>
         <span class="artist-name__family">Steffen</span>
       </h1>
-      <audio id="secret-audio" src="hidden-tune.wav" preload="auto"></audio>
-      <button
-        type="button"
-        class="secret-hit"
-        id="secret-hit"
-        aria-label="Play hidden audio"
-        title=""
-      ></button>
     </div>
-    <p class="tag">Austin · TX</p>
-    <a class="booking-cta" href="https://example.com/booking" target="_blank" rel="noopener noreferrer">Book</a>
+
+    <!-- EGG SPOT 2: thin rule between name and tag → "Chord" (Am9 sustained) -->
+    <button class="egg egg--rule" id="egg-rule" aria-label="Play Chord"></button>
+
+    <!-- EGG SPOT 3: the "·" in "Austin · TX" → "Ping" (crystal sequence) -->
+    <p class="tag">Austin&thinsp;<button class="egg egg--dot" id="egg-dot" aria-label="Play Ping">·</button>&thinsp;TX<span class="cursor-blink" aria-hidden="true">_</span></p>
+
+    <!--
+      PLACEHOLDER: replace the href with your real booking form or contact page.
+      Triple-click this button for a hidden audio easter egg.
+      rel="noopener noreferrer" is a security best-practice for target="_blank".
+    -->
+    <a class="booking-cta" href="/weddings">
+      Book<span class="booking-cta__arrow" aria-hidden="true">→</span>
+    </a>
+
+    <!-- Band credits — click "[ w/ ]" to reveal. Terminal-bracket disclosure. -->
+    <details class="credits-wrap">
+      <summary class="credits-summary" aria-label="Also performed with">[ bands ]</summary>
+      <p class="credits">
+        Sir Woman&ensp;·&ensp;Wild Child&ensp;·&ensp;Mother Falcon&ensp;·&ensp;Dr. Joe&ensp;·&ensp;The Watters
+      </p>
+    </details>
+
+    <!--
+      SEO BIO — hidden from sighted users, readable by Google and screen readers.
+      The .seo-bio class clips it to 1×1px (NOT display:none — that hides from bots).
+      EDIT THIS to keep the bio accurate.
+    -->
+    <p class="seo-bio">
+      Sterling Steffen, known professionally as DJ Sterling, is an Austin-based DJ,
+      multi-instrumentalist, producer, and educator available for weddings and private
+      events across Austin, TX and San Antonio. Growing up in Austin, he developed an
+      eclectic ear spanning country, hip-hop, classical, and jazz. As a saxophonist he
+      has performed with Sir Woman, Wild Child, Mother Falcon, Dr. Joe, and The Watters.
+      His deep musicality and intentional set curation make every event feel alive —
+      from the first dance to the last song of the night.
+      Inquire for Austin wedding DJ availability and booking.
+    </p>
   </main>
 
+
+  <!-- ── FOOTER — social / contact links ───────────────────────────────────── -->
+  <!--
+    PLACEHOLDERS: replace each href="#" with the real platform URL.
+  -->
   <footer>
-    <a class="social" href="#" target="_blank" rel="noopener" aria-label="Bandcamp">
+<a class="social" href="#" target="_blank" rel="noopener" aria-label="Bandcamp">
       <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
         <path d="M0 18.75l7.437-13.5H24l-7.438 13.5H0z" />
       </svg>
     </a>
+
     <a class="social" href="#" target="_blank" rel="noopener" aria-label="Tidal">
       <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
         <path d="M12.012 3.992L8.008 7.996 4.004 3.992 0 7.996 4.004 12l4.004-4.004L12.012 12l-4.004 4.004 4.004 4.004 4.004-4.004L12.012 12l4.004-4.004-4.004-4.004zM16.042 7.996l3.979-3.979L24 7.996l-3.979 3.979z" />
       </svg>
     </a>
+
     <a class="social" href="#" target="_blank" rel="noopener" aria-label="Mixcloud">
       <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
         <path d="M2.462 8.596l1.372 6.49h.319l1.372-6.49h2.462v6.808H6.742v-5.68l.232-.81h-.402l-1.43 6.49H2.854l-1.44-6.49h-.391l.222.81v5.68H0V8.596zM24 8.63v1.429L21.257 12 24 13.941v1.43l-3.235-2.329h-.348l-3.226 2.329v-1.43l2.734-1.94-2.733-1.942V8.63l3.225 2.338h.348zm-7.869 2.75v1.24H9.304v-1.24z" />
       </svg>
     </a>
+
+    <!-- PLACEHOLDER: replace with your real booking email -->
     <a class="social" href="mailto:booking@example.com" aria-label="Email">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <rect x="3" y="5" width="18" height="14" rx="2" />
         <path d="M3 7l9 6 9-6" />
       </svg>
     </a>
+
+    <a class="weddings-link" href="/weddings">[ weddings ]</a>
+
+    <!-- EGG SPOT 4: barely-visible ✦ after the social icons → "Bell" (resonant bell) -->
+    <button class="egg egg--fstar" id="egg-fstar" aria-label="Play Bell">✦</button>
+
+    <!-- Waveform bars: appear when any audio egg is active (body.audio-active) -->
+    <div class="waveform-bars" aria-hidden="true">
+      <span></span><span></span><span></span>
+    </div>
   </footer>
 
+
+  <!-- EGG SPOT 5: barely-visible ○ fixed to the bottom-right corner → "Kick" (four-on-the-floor) -->
+  <button class="egg egg--corner" id="egg-corner" aria-label="Play Kick">○</button>
+
+  <!-- EGG SPOT 6: completely invisible top-left spot → "Static" (filtered noise) -->
+  <button class="egg egg--top" id="egg-top" aria-label="Play Static"></button>
+
+  <!-- ∿ Sound selector — bottom-left, mirrors the ○ corner egg on the right -->
+  <button class="tray-btn tray-btn--songs" id="tray-songs" aria-label="Open sound menu">∿</button>
+
+  <!-- ── SOUND TRAY — triggered by ∿ bottom-left ─────────────────────────── -->
+  <div id="info-tray" class="info-tray" aria-hidden="true" hidden>
+    <button class="info-tray__close" id="tray-close" aria-label="Close">[ esc ]</button>
+    <p class="info-tray__label">sounds</p>
+    <ul class="info-tray__list info-tray__list--sounds">
+      <li><button data-tune="drift">drift</button><span>ambient arpeggio</span></li>
+      <li><button data-tune="ping">ping</button><span>crystal sequence</span></li>
+      <li><button data-tune="kick">kick</button><span>four on the floor</span></li>
+      <li><button data-tune="static">static</button><span>filtered noise</span></li>
+      <li><button data-tune="arp">arp</button><span>pentatonic run</span></li>
+      <li><button data-tune="chord">chord</button><span>am9 sustained</span></li>
+      <li><button data-tune="bell">bell</button><span>resonant bell</span></li>
+    </ul>
+  </div>
+
+  <!-- ASCII FLASH: JS fills the textContent and triggers animation every ~20s -->
+  <div class="ascii-flash" id="ascii-flash" aria-hidden="true"></div>
+
+
+
+  <!-- ── STRUCTURED DATA (JSON-LD) ─────────────────────────────────────────── -->
+  <!--
+    JSON-LD tells Google what this page represents.
+    EDIT: add "sameAs" URLs once social links are real.
+    EDIT: add "email" once booking email is confirmed.
+    Reference: https://schema.org/MusicGroup
+  -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "MusicGroup",
-    "name": "Sterling Steffen",
-    "url": "https://sterlingsteffen.com/",
-    "description": "Musician based in Austin, Texas.",
-    "address": {
-      "@type": "PostalAddress",
-      "addressLocality": "Austin",
-      "addressRegion": "TX",
-      "addressCountry": "US"
-    }
+    "@graph": [
+      {
+        "@type": ["MusicGroup", "LocalBusiness"],
+        "@id": "https://sterlingsteffen.com/#artist",
+        "name": "Sterling Steffen",
+        "alternateName": "DJ Sterling",
+        "url": "https://sterlingsteffen.com/",
+        "image": "https://sterlingsteffen.com/assets/og-image.jpg",
+        "description": "Austin-based DJ, multi-instrumentalist, producer, and educator. Available for weddings and private events in Austin, TX and San Antonio.",
+        "serviceType": ["Wedding DJ", "Event DJ", "Private Event DJ"],
+        "knowsAbout": ["Wedding DJ Services", "Electronic Music", "Jazz", "Hip-Hop", "Country", "Classical Music"],
+        "areaServed": [
+          {
+            "@type": "City",
+            "name": "Austin",
+            "containedInPlace": { "@type": "State", "name": "Texas" }
+          },
+          {
+            "@type": "City",
+            "name": "San Antonio",
+            "containedInPlace": { "@type": "State", "name": "Texas" }
+          }
+        ],
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Austin",
+          "addressRegion": "TX",
+          "addressCountry": "US"
+        }
+      }
+    ]
   }
   </script>
 
+  <!-- ── SCRIPTS ───────────────────────────────────────────────────────────── -->
+  <!-- defer: runs after HTML is fully parsed — never blocks page render -->
+  <script src="js/main.js" defer></script>
+
+  <!-- Service worker registration. Fails silently — SW is a progressive enhancement. -->
   <script>
-    (function () {
-      var btn = document.getElementById('secret-hit');
-      var audio = document.getElementById('secret-audio');
-      if (!btn || !audio) return;
-
-      var MAX_LOOPS = 3;
-      var loopsDone = 0;
-
-      function finishSession() {
-        audio.pause();
-        audio.currentTime = 0;
-        loopsDone = 0;
-        btn.classList.remove('is-playing');
-        btn.setAttribute('aria-label', 'Play hidden audio');
-      }
-
-      audio.addEventListener('ended', function () {
-        loopsDone++;
-        if (loopsDone < MAX_LOOPS) {
-          audio.currentTime = 0;
-          audio.play().catch(function () {});
-        } else {
-          finishSession();
-        }
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').catch(() => {});
       });
-
-      btn.addEventListener('click', function () {
-        if (audio.paused) {
-          if (audio.ended || loopsDone >= MAX_LOOPS) {
-            loopsDone = 0;
-            audio.currentTime = 0;
-          }
-          audio.play().catch(function () {});
-          btn.classList.add('is-playing');
-          btn.setAttribute('aria-label', 'Pause hidden audio');
-        } else {
-          audio.pause();
-          btn.classList.remove('is-playing');
-          btn.setAttribute('aria-label', 'Play hidden audio');
-        }
-      });
-    })();
+    }
   </script>
+
 </body>
 </html>

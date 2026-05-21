@@ -1,0 +1,10 @@
+# robots.txt — tells search engine crawlers what they can and can't index.
+# For a public artist site like this, everything should be open.
+# Reference: https://developers.google.com/search/docs/crawling-indexing/robots/intro
+
+User-agent: *
+Allow: /
+
+# Point crawlers to the sitemap for faster, more complete indexing.
+# Update this URL once the domain is live.
+Sitemap: https://sterlingsteffen.com/sitemap.xml
